@@ -15,11 +15,11 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 
 | | Material Expressive | Apple Liquid Glass | **Expressive Glass** |
 |---|---|---|---|
-| **Shapes** | Bold squircles, expressive radii | Smooth, continuous curves | ✅ Both |
-| **Motion** | Emphasized easing | Spring physics, fluid drag | ✅ Spring physics everywhere |
-| **Surfaces** | Tonal elevation, color | Frosted glass, translucency | ✅ Frosted glass + tonal color |
-| **Feedback** | Ripple | Scale, stretch, rubber-band | ✅ Scale + specular glow |
-| **Highlights** | — | Specular edge refraction | ✅ Animated specular sweep |
+| **Shapes** | Bold squircles, expressive radii | Smooth, continuous curves | Both |
+| **Motion** | Emphasized easing | Spring physics, fluid drag |  Spring physics everywhere |
+| **Surfaces** | Tonal elevation, color | Frosted glass, translucency |  Frosted glass + tonal color |
+| **Feedback** | Ripple | Scale, stretch, rubber-band |  Scale + specular glow |
+| **Highlights** | — | Specular edge refraction |  Animated specular sweep |
 
 ---
 
