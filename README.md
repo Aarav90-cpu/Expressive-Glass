@@ -46,6 +46,23 @@ ExpressGLBottomBar(
 )
 ```
 
+### `ExpressGLToggle`
+A fluid, squishy toggle switch that merges Material 3 boldness with Apple-like spring physics.
+
+- **Squish on press** — Thumb capsule expands dynamically when held
+- **Stretch on drag** — Dragging the thumb stretches it based on velocity (organic slosh)
+- **Blocked State** — Vibrates and snaps back if `isBlocked` is true
+
+```kotlin
+var isChecked by remember { mutableStateOf(true) }
+
+ExpressGLToggle(
+    checked = isChecked,
+    onCheckedChange = { isChecked = it },
+    isBlocked = false // Set to true to trigger the rejection animation
+)
+```
+
 ---
 
 ## 🎨 Shared Effects

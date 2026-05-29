@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ark.development.expressgl.library.components.ExpressGLBottomBar
 import ark.development.expressgl.library.components.ExpressGLTabItem
+import ark.development.expressgl.library.components.ExpressGLToggle
 import ark.development.expressgl.ui.theme.ExpressivePeach
 import ark.development.expressgl.ui.theme.ExpressivePurple
 import ark.development.expressgl.ui.theme.ExpressiveExpressGLTheme
@@ -170,7 +171,45 @@ fun ShowcaseApp() {
             )
         }
 
-        // 4. Original Bottom Bar
+        // 4. Toggle
+        Text(
+            text = "Fluid Toggle",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            var toggle1 by remember { mutableStateOf(true) }
+            var toggle2 by remember { mutableStateOf(false) }
+            
+            ExpressGLToggle(
+                checked = toggle1,
+                onCheckedChange = { toggle1 = it }
+            )
+            
+            ExpressGLToggle(
+                checked = toggle2,
+                onCheckedChange = { toggle2 = it },
+                checkedColor = ExpressivePurple
+            )
+            
+            ExpressGLToggle(
+                checked = false,
+                onCheckedChange = {},
+                isBlocked = true
+            )
+        }
+
+        // 5. Original Bottom Bar
+        Text(
+            text = "Bottom Bar",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
         var selectedTab by remember { mutableIntStateOf(0) }
         val tabs = listOf(
             ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes"),
