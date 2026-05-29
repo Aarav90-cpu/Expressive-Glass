@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Expressive Glass"
 include(":app")
+include(":Expressive Glass")
