@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
+    `maven-publish`
 }
 
 android {
-    namespace = "ark.development.expressgl"
+    namespace = "ark.development.expressgl.library"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -21,6 +22,25 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "ark.development"
+            artifactId = "expressgl"
+            version = "0.0.1-alpha"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
 
 dependencies {
