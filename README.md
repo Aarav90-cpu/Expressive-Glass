@@ -4,7 +4,7 @@
 
 A Jetpack Compose UI library that fuses Material Design's bold, expressive visual language with Apple's physics-driven interaction model. Every component *looks* Material Expressive and *feels* like Apple's Liquid Glass.
 
-[![](https://jitpack.io/v/YOUR_USERNAME/ExpressiveGlass.svg)](https://jitpack.io/#YOUR_USERNAME/ExpressiveGlass)
+[![](https://jitpack.io/v/Aarav90-cpu/Expressive-Glass.svg)](https://jitpack.io/#Aarav90-cpu/Expressive-Glass)
 ![API](https://img.shields.io/badge/API-36%2B-brightgreen.svg)
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-2026.05-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)
@@ -89,9 +89,9 @@ dependencyResolutionManagement {
 
 **`build.gradle.kts`** (app module)
 ```kotlin
-dependencies {
-    implementation("com.github.YOUR_USERNAME:ExpressiveGlass:0.0.1-alpha")
-}
+	dependencies {
+	        implementation("com.github.Aarav90-cpu:Expressive-Glass:<VERSION>")
+	}
 ```
 
 ---
