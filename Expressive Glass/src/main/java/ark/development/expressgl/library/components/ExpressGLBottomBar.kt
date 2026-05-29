@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import ark.development.expressgl.library.shapes.ExpressGLCapsule
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +44,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ark.development.expressgl.library.effect.specularEdge
 import ark.development.expressgl.library.theme.LocalExpressGLStyle
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -64,7 +63,7 @@ data class ExpressGLTabItem(
  * A Material-styled bottom navigation bar with Apple's Liquid Glass feel.
  *
  * Features:
- * - Translucent frosted-glass bar background with specular edge
+ * - Translucent frosted-glass bar background
  * - Animated pill indicator behind the selected tab
  * - Horizontal drag gesture on the pill to fluidly slide between tabs
  * - Spring physics for pill snapping
@@ -216,7 +215,7 @@ fun ExpressGLBottomBar(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .clip(CircleShape)
+                .clip(ExpressGLCapsule)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -233,11 +232,7 @@ fun ExpressGLBottomBar(
                             Color.Transparent,
                         ),
                     ),
-                    shape = CircleShape,
-                )
-                .specularEdge(
-                    highlightColor = expressGLStyle.specularColor,
-                    intensity = expressGLStyle.specularIntensity * 0.6f,
+                    shape = ExpressGLCapsule,
                 )
         )
         // Pill indicator
@@ -260,7 +255,7 @@ fun ExpressGLBottomBar(
                     }
                     .width(pillWidthDp)
                     .height(pillHeightDp)
-                    .clip(CircleShape)
+                    .clip(ExpressGLCapsule)
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -277,7 +272,7 @@ fun ExpressGLBottomBar(
                                 Color.Transparent,
                             ),
                         ),
-                        shape = CircleShape,
+                        shape = ExpressGLCapsule,
                     ),
             )
         }

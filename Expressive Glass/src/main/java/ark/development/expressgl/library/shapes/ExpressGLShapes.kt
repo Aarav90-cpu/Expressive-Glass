@@ -1,6 +1,5 @@
 package ark.development.expressgl.library.shapes
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -10,30 +9,42 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.kyant.capsule.ContinuousCapsule
+import com.kyant.capsule.ContinuousRoundedRectangle
+import com.kyant.capsule.continuities.G2Continuity
+import com.kyant.capsule.continuities.G2ContinuityProfile
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
 /**
- * A standard pill/capsule shape.
+ * Custom Apple-like G2 Continuity profile for ExpressGL surfaces.
  */
-val CapsuleShape: Shape = RoundedCornerShape(50)
+val ExpressGLContinuity = G2Continuity(
+    profile = G2ContinuityProfile.RoundedRectangle.copy(
+        extendedFraction = 0.5,
+        arcFraction = 0.5,
+        bezierCurvatureScale = 1.1,
+        arcCurvatureScale = 1.1
+    ),
+    capsuleProfile = G2ContinuityProfile.Capsule.copy(
+        extendedFraction = 0.5,
+        arcFraction = 0.25
+    )
+)
 
 /**
- * A rounded rectangle where you can control individual corners.
+ * A standard pill/capsule shape using Apple-like continuous G2 curves.
  */
-fun RectCapsuleShape(
-    topStart: Dp = 0.dp,
-    topEnd: Dp = 0.dp,
-    bottomEnd: Dp = 0.dp,
-    bottomStart: Dp = 0.dp
-): Shape = RoundedCornerShape(
-    topStart = topStart,
-    topEnd = topEnd,
-    bottomEnd = bottomEnd,
-    bottomStart = bottomStart
-)
+val ExpressGLCapsule: Shape = ContinuousCapsule(continuity = ExpressGLContinuity)
+
+/**
+ * A rounded rectangle with Apple-like continuous G2 corners.
+ */
+fun ExpressGLRectCapsule(
+    radius: Dp = 24.dp
+): Shape = ContinuousRoundedRectangle(radius, continuity = ExpressGLContinuity)
 
 /**
  * A triangle with smooth corners.

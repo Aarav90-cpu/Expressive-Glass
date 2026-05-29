@@ -59,4 +59,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    // Smooth capsule and rounded rectangle shapes
+    implementation("io.github.kyant0:capsule:2.1.3")
 }

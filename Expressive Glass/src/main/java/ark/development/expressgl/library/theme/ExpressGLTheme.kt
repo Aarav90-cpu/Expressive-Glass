@@ -14,10 +14,8 @@ import androidx.compose.ui.unit.dp
  */
 @Immutable
 data class ExpressGLStyle(
-    /** Base color for specular highlights. */
-    val specularColor: Color = Color.White,
-    /** Intensity of the specular highlight (0–1). */
-    val specularIntensity: Float = 0.35f,
+    /** Base color for glass mask. */
+    val glassMaskColor: Color = Color.White,
     /** Default corner radius for glass surfaces. */
     val cornerRadius: Dp = 24.dp,
     /** Default blur radius for frosted glass effects. */
@@ -41,8 +39,7 @@ val LocalExpressGLStyle = staticCompositionLocalOf { ExpressGLStyle() }
  * when MaterialTheme colors are not sufficient.
  */
 object ExpressGLColors {
-    val SpecularWhite = Color(0xFFFFFFFF)
-    val SpecularBlue = Color(0x6688BBFF)
+    val ShadowBlue = Color(0x330055FF)
     val FrostWhite = Color(0x80FFFFFF)
     val FrostDark = Color(0x1A000000)
     val GlowBlue = Color(0x3366AAFF)

@@ -18,8 +18,8 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 | **Shapes** | Bold squircles, expressive radii | Smooth, continuous curves | Both |
 | **Motion** | Emphasized easing | Spring physics, fluid drag |  Spring physics everywhere |
 | **Surfaces** | Tonal elevation, color | Frosted glass, translucency |  Frosted glass + tonal color |
-| **Feedback** | Ripple | Scale, stretch, rubber-band |  Scale + specular glow |
-| **Highlights** | — | Specular edge refraction |  Animated specular sweep |
+| **Feedback** | Ripple | Scale, stretch, rubber-band |  Scale + dynamic glow |
+| **Highlights** | — | Static edge refraction |  Dynamic reflections |
 
 ---
 
@@ -30,7 +30,7 @@ Material Bottom Navigation with a draggable fluid pill indicator.
 
 - **Draggable pill** — Grab the selection pill and drag it between tabs
 - **Spring snap** — Pill snaps to nearest tab with bouncy physics
-- **Frosted bar** — Translucent glass background with specular edge
+- **Frosted bar** — Translucent glass background
 - **Morphing icon** — Selected icon scales up expressively
 
 ```kotlin
@@ -49,19 +49,12 @@ ExpressGLBottomBar(
 
 ## 🎨 Shared Effects
 
-### Specular Highlight
-```kotlin
-// Static edge glow
-Modifier.specularEdge()
-```
-
 ### Glass Theme
 ```kotlin
 // Override glass defaults anywhere in the tree
 CompositionLocalProvider(
     LocalExpressGLStyle provides ExpressGLStyle(
-        specularIntensity = 0.5f,
-        cornerRadius = 32.dp,
+        cornerRadius = 24.dp,
     )
 ) {
     ExpressGLBottomBar(...)
@@ -111,13 +104,17 @@ dependencyResolutionManagement {
 
 ```
 Expressive Glass/
-├── effect/
-│   └── SpecularHighlight.kt   — Static glass edge highlight
 ├── theme/
 │   └── ExpressGLTheme.kt          — ExpressGLStyle, CompositionLocal, defaults
 └── components/
     └── ExpressGLBottomBar.kt      — Draggable pill bottom nav
 ```
+
+---
+
+## 💖 Credits
+
+A huge thank you to [Kyant0](https://github.com/Kyant0) for their amazing [capsule](https://github.com/Kyant0/capsule) library, which powers the beautiful Apple-like continuous G2 curves used in our capsules and rounded rectangles!
 
 ---
 

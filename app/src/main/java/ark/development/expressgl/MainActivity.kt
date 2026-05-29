@@ -59,6 +59,21 @@ import ark.development.expressgl.ui.theme.ExpressivePeach
 import ark.development.expressgl.ui.theme.ExpressivePurple
 import ark.development.expressgl.ui.theme.ExpressiveExpressGLTheme
 import ark.development.expressgl.ui.theme.ExpressiveTeal
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.IntOffset
+import ark.development.expressgl.library.layout.ExpressGLGooeyContainer
+import ark.development.expressgl.library.shapes.ExpressGLCapsule
+import ark.development.expressgl.library.shapes.SmoothPolygonShape
+import ark.development.expressgl.library.shapes.TriangleShape
+import ark.development.expressgl.library.theme.ExpressGLColors
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +106,7 @@ fun ShowcaseApp() {
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         Text(
-            text = "Fluid Glass Bars",
+            text = "ExpressGL Expansion",
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 letterSpacing = (-0.5).sp,
@@ -100,60 +115,73 @@ fun ShowcaseApp() {
             modifier = Modifier.padding(horizontal = 24.dp)
         )
 
-        // Generate bars from 2 to 7 tabs
-        for (count in 2..7) {
-            var selectedTab by remember { mutableIntStateOf(0) }
-            
-            val tabs = remember(count) {
-                List(count) { i ->
-                    val icons = listOf(
-                        Icons.Rounded.TouchApp,
-                        Icons.Rounded.Dashboard,
-                        Icons.Rounded.Info,
-                        Icons.Rounded.Star,
-                        Icons.Rounded.Palette,
-                        Icons.Rounded.Rocket,
-                        Icons.Rounded.AutoAwesome
-                    )
-                    val labels = listOf("Controls", "Cards", "About", "Favorites", "Theme", "Boost", "Magic")
-                    ExpressGLTabItem(
-                        icon = icons[i % icons.size],
-                        label = labels[i % labels.size]
-                    )
-                }
-            }
-
-            // Alternate colors for variety
-            val (containerColor, pillColor, activeColor) = when (count) {
-                3 -> Triple(ExpressiveTeal.copy(alpha = 0.3f), ExpressiveTeal, Color.White)
-                5 -> Triple(ExpressivePurple.copy(alpha = 0.2f), ExpressivePurple, Color.White)
-                7 -> Triple(ExpressivePeach.copy(alpha = 0.2f), ExpressivePeach, Color.White)
-                else -> Triple(
-                    MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                    MaterialTheme.colorScheme.primaryContainer,
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "$count Tabs",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                )
-                
-                ExpressGLBottomBar(
-                    items = tabs,
-                    selectedIndex = selectedTab,
-                    onTabSelected = { selectedTab = it },
-                    containerColor = containerColor,
-                    pillColor = pillColor,
-                    activeColor = activeColor,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
+        // 1. Shapes
+        Text(
+            text = "Smooth Shapes",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Box(Modifier.size(60.dp).clip(TriangleShape()).background(ExpressiveTeal))
+            Box(Modifier.size(60.dp).clip(SmoothPolygonShape(sides = 5)).background(ExpressivePurple))
+            Box(Modifier.size(60.dp).clip(SmoothPolygonShape(sides = 8)).background(ExpressivePeach))
+            Box(Modifier.size(60.dp).clip(ExpressGLCapsule).background(MaterialTheme.colorScheme.primary))
         }
+
+        // 3. Gooey Merging
+        Text(
+            text = "Gooey Merging",
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+        var dragOffset by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
+        ExpressGLGooeyContainer(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(32.dp))
+        ) {
+            // Static Circle
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.Center)
+                    .background(Color.Red, CircleShape)
+            )
+
+            // Draggable Capsule
+            Box(
+                modifier = Modifier
+                    .offset { IntOffset(dragOffset.x.roundToInt(), dragOffset.y.roundToInt()) }
+                    .size(80.dp, 120.dp)
+                    .align(Alignment.Center)
+                    .background(Color.Red, ExpressGLCapsule)
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            dragOffset += dragAmount
+                        }
+                    }
+            )
+        }
+
+        // 4. Original Bottom Bar
+        var selectedTab by remember { mutableIntStateOf(0) }
+        val tabs = listOf(
+            ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes"),
+            ExpressGLTabItem(Icons.Rounded.Star, "Gooey"),
+            ExpressGLTabItem(Icons.Rounded.AutoAwesome, "Tilt")
+        )
+        ExpressGLBottomBar(
+            items = tabs,
+            selectedIndex = selectedTab,
+            onTabSelected = { selectedTab = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
         
         Spacer(modifier = Modifier.height(32.dp))
     }
