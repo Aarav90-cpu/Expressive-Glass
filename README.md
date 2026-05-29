@@ -15,7 +15,7 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 
 | | Material Expressive | Apple Liquid Glass | **Expressive Glass** |
 |---|---|---|---|
-| **Shapes** | Bold squircles, expressive radii | Smooth, continuous curves | Both |
+| **Shapes** | Bold squircles, expressive radii | Smooth, continuous curves | ✅  Both |
 | **Motion** | Emphasized easing | Spring physics, fluid drag |  Spring physics everywhere |
 | **Surfaces** | Tonal elevation, color | Frosted glass, translucency |  Frosted glass + tonal color |
 | **Feedback** | Ripple | Scale, stretch, rubber-band |  Scale + dynamic glow |
@@ -114,7 +114,7 @@ Expressive Glass/
 
 ## 💖 Credits
 
-A huge thank you to [Kyant0](https://github.com/Kyant0) for their amazing [capsule](https://github.com/Kyant0/capsule) library, which powers the beautiful Apple-like continuous G2 curves used in our capsules and rounded rectangles!
+A huge thank you to [Kyant0](https://github.com/Kyant0) for their amazing [capsule](https://github.com/Kyant0/capsule) library.
 
 ---
 
