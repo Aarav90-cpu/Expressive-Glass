@@ -30,6 +30,7 @@ Material Bottom Navigation with a draggable fluid pill indicator.
 
 - **Draggable pill** — Grab the selection pill and drag it between tabs
 - **Spring snap** — Pill snaps to nearest tab with bouncy physics
+- **Blocked Tabs** — Rejection animation throws the pill back with a heavy spring slosh and vibrates the bar if navigation is denied
 - **Frosted bar** — Translucent glass background
 - **Morphing icon** — Selected icon scales up expressively
 
@@ -38,7 +39,7 @@ ExpressGLBottomBar(
     items = listOf(
         ExpressGLTabItem(Icons.Rounded.Home, "Home"),
         ExpressGLTabItem(Icons.Rounded.Search, "Search"),
-        ExpressGLTabItem(Icons.Rounded.Settings, "Settings"),
+        ExpressGLTabItem(Icons.Rounded.Lock, "Pro", isBlocked = true),
     ),
     selectedIndex = selectedTab,
     onTabSelected = { selectedTab = it },

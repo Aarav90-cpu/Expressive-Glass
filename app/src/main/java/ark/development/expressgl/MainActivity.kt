@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.Rocket
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.TouchApp
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -174,7 +175,8 @@ fun ShowcaseApp() {
         val tabs = listOf(
             ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes"),
             ExpressGLTabItem(Icons.Rounded.Star, "Gooey"),
-            ExpressGLTabItem(Icons.Rounded.AutoAwesome, "Tilt")
+            ExpressGLTabItem(Icons.Rounded.AutoAwesome, "Tilt"),
+            ExpressGLTabItem(Icons.Rounded.Lock, "Pro", isBlocked = true)
         )
         ExpressGLBottomBar(
             items = tabs,

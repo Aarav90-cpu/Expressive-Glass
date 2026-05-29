@@ -57,6 +57,7 @@ import kotlin.math.roundToInt
 data class ExpressGLTabItem(
     val icon: ImageVector,
     val label: String,
+    val isBlocked: Boolean = false,
 )
 
 /**
@@ -118,6 +119,25 @@ fun ExpressGLBottomBar(
         }
     }
 
+    val rejectShake = remember { Animatable(0f) }
+    val rejectScale = remember { Animatable(1f) }
+
+    fun triggerRejectAnimation() {
+        scope.launch {
+            launch {
+                rejectScale.animateTo(1.05f, animationSpec = androidx.compose.animation.core.tween(100))
+                rejectScale.animateTo(1f, animationSpec = ExpressGLSprings.bouncy())
+            }
+            launch {
+                rejectShake.animateTo(25f, animationSpec = androidx.compose.animation.core.tween(50))
+                rejectShake.animateTo(-25f, animationSpec = androidx.compose.animation.core.tween(50))
+                rejectShake.animateTo(15f, animationSpec = androidx.compose.animation.core.tween(50))
+                rejectShake.animateTo(-15f, animationSpec = androidx.compose.animation.core.tween(50))
+                rejectShake.animateTo(0f, animationSpec = ExpressGLSprings.bouncy())
+            }
+        }
+    }
+
     var isBarPressed by remember { mutableStateOf(false) }
     val displayCenter = if (isDraggingPill) dragCenter else pillCenter.value
     val isMoving = isDraggingPill || kotlin.math.abs(targetPillCenter - pillCenter.value) > 1f
@@ -147,6 +167,11 @@ fun ExpressGLBottomBar(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             .height(barHeight)
+            .graphicsLayer {
+                scaleX = rejectScale.value
+                scaleY = rejectScale.value
+                translationX = rejectShake.value
+            }
             .onSizeChanged { barWidthPx = it.width.toFloat() }
             .pointerInput(Unit) {
                 awaitPointerEventScope {
@@ -176,35 +201,55 @@ fun ExpressGLBottomBar(
                         }
                     },
                     onDragEnd = {
-                        val finalTab = currentDragIndex
+                        var finalTab = currentDragIndex
                         dragVelocity = 0f
+                        
+                        val isRejected = items[finalTab].isBlocked
+                        if (isRejected) {
+                            finalTab = selectedIndex
+                            triggerRejectAnimation()
+                        }
+                        
+                        val finalTarget = tabWidthPx * finalTab + tabWidthPx * 0.5f
+                        val initVel = if (isRejected) (finalTarget - dragCenter) * 15f else 0f
+                        
                         scope.launch {
                             pillCenter.snapTo(dragCenter)
                             isDraggingPill = false
-                            if (finalTab != selectedIndex) {
+                            if (finalTab != selectedIndex && !isRejected) {
                                 onTabSelected(finalTab)
-                            } else {
-                                pillCenter.animateTo(
-                                    targetValue = tabWidthPx * selectedIndex + tabWidthPx * 0.5f,
-                                    animationSpec = ExpressGLSprings.bouncy(),
-                                )
                             }
+                            pillCenter.animateTo(
+                                targetValue = finalTarget,
+                                animationSpec = ExpressGLSprings.bouncy(),
+                                initialVelocity = initVel
+                            )
                         }
                     },
                     onDragCancel = {
-                        val finalTab = currentDragIndex
+                        var finalTab = currentDragIndex
                         dragVelocity = 0f
+                        
+                        val isRejected = items[finalTab].isBlocked
+                        if (isRejected) {
+                            finalTab = selectedIndex
+                            triggerRejectAnimation()
+                        }
+                        
+                        val finalTarget = tabWidthPx * finalTab + tabWidthPx * 0.5f
+                        val initVel = if (isRejected) (finalTarget - dragCenter) * 15f else 0f
+
                         scope.launch {
                             pillCenter.snapTo(dragCenter)
                             isDraggingPill = false
-                            if (finalTab != selectedIndex) {
+                            if (finalTab != selectedIndex && !isRejected) {
                                 onTabSelected(finalTab)
-                            } else {
-                                pillCenter.animateTo(
-                                    targetValue = tabWidthPx * selectedIndex + tabWidthPx * 0.5f,
-                                    animationSpec = ExpressGLSprings.bouncy(),
-                                )
                             }
+                            pillCenter.animateTo(
+                                targetValue = finalTarget,
+                                animationSpec = ExpressGLSprings.bouncy(),
+                                initialVelocity = initVel
+                            )
                         }
                     }
                 )
@@ -299,7 +344,11 @@ fun ExpressGLBottomBar(
                         .weight(1f)
                         .pointerInput(index) {
                             detectTapGestures {
-                                onTabSelected(index)
+                                if (item.isBlocked) {
+                                    triggerRejectAnimation()
+                                } else {
+                                    onTabSelected(index)
+                                }
                             }
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
