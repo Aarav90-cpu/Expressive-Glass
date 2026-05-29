@@ -23,61 +23,14 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 
 ---
 
-## 🧩 Components
+## 📚 Documentation
 
-### `ExpressGLBottomBar`
-Material Bottom Navigation with a draggable fluid pill indicator.
+Dive deep into the Expressive Glass components, their physics, and how to customize them down to the last pixel and color stop.
 
-- **Draggable pill** — Grab the selection pill and drag it between tabs
-- **Spring snap** — Pill snaps to nearest tab with bouncy physics
-- **Blocked Tabs** — Rejection animation throws the pill back with a heavy spring slosh and vibrates the bar if navigation is denied
-- **Frosted bar** — Translucent glass background
-- **Morphing icon** — Selected icon scales up expressively
-
-```kotlin
-ExpressGLBottomBar(
-    items = listOf(
-        ExpressGLTabItem(Icons.Rounded.Home, "Home"),
-        ExpressGLTabItem(Icons.Rounded.Search, "Search"),
-        ExpressGLTabItem(Icons.Rounded.Lock, "Pro", isBlocked = true),
-    ),
-    selectedIndex = selectedTab,
-    onTabSelected = { selectedTab = it },
-)
-```
-
-### `ExpressGLToggle`
-A fluid, squishy toggle switch that merges Material 3 boldness with Apple-like spring physics.
-
-- **Squish on press** — Thumb capsule expands dynamically when held
-- **Stretch on drag** — Dragging the thumb stretches it based on velocity (organic slosh)
-- **Blocked State** — Vibrates and snaps back if `isBlocked` is true
-
-```kotlin
-var isChecked by remember { mutableStateOf(true) }
-
-ExpressGLToggle(
-    checked = isChecked,
-    onCheckedChange = { isChecked = it },
-    isBlocked = false // Set to true to trigger the rejection animation
-)
-```
-
----
-
-## 🎨 Shared Effects
-
-### Glass Theme
-```kotlin
-// Override glass defaults anywhere in the tree
-CompositionLocalProvider(
-    LocalExpressGLStyle provides ExpressGLStyle(
-        cornerRadius = 24.dp,
-    )
-) {
-    ExpressGLBottomBar(...)
-}
-```
+- [🗂️ ExpressGLBottomBar](docs/bottom_tabs.md)
+- [🎚️ ExpressGLToggle](docs/toggle.md)
+- [🎨 Theme Usage](docs/theme_usage.md)
+- [🟢 How to Create Mergeable Shapes](docs/how_to_create_mergeable_shapes.md)
 
 ---
 
