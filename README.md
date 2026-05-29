@@ -25,7 +25,7 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 
 ## 🧩 Components
 
-### `GlassBottomBar`
+### `ExpressGLBottomBar`
 Material Bottom Navigation with a draggable fluid pill indicator.
 
 - **Draggable pill** — Grab the selection pill and drag it between tabs
@@ -34,11 +34,11 @@ Material Bottom Navigation with a draggable fluid pill indicator.
 - **Morphing icon** — Selected icon scales up expressively
 
 ```kotlin
-GlassBottomBar(
+ExpressGLBottomBar(
     items = listOf(
-        GlassTabItem(Icons.Rounded.Home, "Home"),
-        GlassTabItem(Icons.Rounded.Search, "Search"),
-        GlassTabItem(Icons.Rounded.Settings, "Settings"),
+        ExpressGLTabItem(Icons.Rounded.Home, "Home"),
+        ExpressGLTabItem(Icons.Rounded.Search, "Search"),
+        ExpressGLTabItem(Icons.Rounded.Settings, "Settings"),
     ),
     selectedIndex = selectedTab,
     onTabSelected = { selectedTab = it },
@@ -59,12 +59,12 @@ Modifier.specularEdge()
 ```kotlin
 // Override glass defaults anywhere in the tree
 CompositionLocalProvider(
-    LocalGlassStyle provides GlassStyle(
+    LocalExpressGLStyle provides ExpressGLStyle(
         specularIntensity = 0.5f,
         cornerRadius = 32.dp,
     )
 ) {
-    GlassBottomBar(...)
+    ExpressGLBottomBar(...)
 }
 ```
 
@@ -114,9 +114,9 @@ Expressive Glass/
 ├── effect/
 │   └── SpecularHighlight.kt   — Static glass edge highlight
 ├── theme/
-│   └── GlassTheme.kt          — GlassStyle, CompositionLocal, defaults
+│   └── ExpressGLTheme.kt          — ExpressGLStyle, CompositionLocal, defaults
 └── components/
-    └── GlassBottomBar.kt      — Draggable pill bottom nav
+    └── ExpressGLBottomBar.kt      — Draggable pill bottom nav
 ```
 
 ---
@@ -124,7 +124,7 @@ Expressive Glass/
 ## 📄 License
 
 ```
-Copyright 2024 Expressive Glass Contributors
+Copyright 2024 Aarav Ravindra Kharade
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

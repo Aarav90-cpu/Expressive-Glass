@@ -76,7 +76,9 @@ fun Modifier.specularHighlight(
  */
 fun Modifier.specularEdge(
     highlightColor: Color = Color.White,
-    edgeWidth: Float = 2f,
+    tiltX: Float = 0f,
+    tiltY: Float = 0f,
+    rainbow: Boolean = false,
     intensity: Float = 0.4f,
 ): Modifier = this.drawWithContent {
     drawContent()
@@ -84,25 +86,40 @@ fun Modifier.specularEdge(
     val w = size.width
     val h = size.height
 
-    // Top edge highlight
-    val topBrush = Brush.verticalGradient(
-        colors = listOf(
-            highlightColor.copy(alpha = intensity),
-            Color.Transparent,
-        ),
-        startY = 0f,
-        endY = edgeWidth * 4f,
-    )
-    drawRect(brush = topBrush, size = size.copy(height = edgeWidth * 4f))
+    if (rainbow) {
+        val sweep = Brush.sweepGradient(
+            colors = listOf(
+                Color.Red.copy(alpha = intensity),
+                Color.Yellow.copy(alpha = intensity),
+                Color.Green.copy(alpha = intensity),
+                Color.Blue.copy(alpha = intensity),
+                Color.Magenta.copy(alpha = intensity),
+                Color.Red.copy(alpha = intensity)
+            ),
+            center = Offset(w / 2f, h / 2f)
+        )
+        // Combine rainbow with a soft radial mask based on tilt
+        val centerX = w * 0.5f + w * 0.8f * tiltX
+        val centerY = h * 0.5f - h * 0.8f * tiltY
+        
+        drawRect(
+            brush = sweep,
+            alpha = 1f,
+            blendMode = androidx.compose.ui.graphics.BlendMode.Plus
+        )
+    } else {
+        val centerX = w * 0.5f + w * 0.6f * tiltX
+        val centerY = h * 0.5f - h * 0.6f * tiltY
 
-    // Left edge highlight
-    val leftBrush = Brush.horizontalGradient(
-        colors = listOf(
-            highlightColor.copy(alpha = intensity * 0.6f),
-            Color.Transparent,
-        ),
-        startX = 0f,
-        endX = edgeWidth * 3f,
-    )
-    drawRect(brush = leftBrush, size = size.copy(width = edgeWidth * 3f))
+        val radial = Brush.radialGradient(
+            colors = listOf(
+                highlightColor.copy(alpha = intensity),
+                Color.Transparent,
+                Color.Transparent
+            ),
+            center = Offset(centerX, centerY),
+            radius = maxOf(w, h) * 0.8f
+        )
+        drawRect(brush = radial)
+    }
 }

@@ -53,11 +53,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ark.development.expressgl.library.components.GlassBottomBar
-import ark.development.expressgl.library.components.GlassTabItem
+import ark.development.expressgl.library.components.ExpressGLBottomBar
+import ark.development.expressgl.library.components.ExpressGLTabItem
 import ark.development.expressgl.ui.theme.ExpressivePeach
 import ark.development.expressgl.ui.theme.ExpressivePurple
-import ark.development.expressgl.ui.theme.ExpressiveGlassTheme
+import ark.development.expressgl.ui.theme.ExpressiveExpressGLTheme
 import ark.development.expressgl.ui.theme.ExpressiveTeal
 
 class MainActivity : ComponentActivity() {
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ExpressiveGlassTheme {
+            ExpressiveExpressGLTheme {
                 ShowcaseApp()
             }
         }
@@ -116,7 +116,7 @@ fun ShowcaseApp() {
                         Icons.Rounded.AutoAwesome
                     )
                     val labels = listOf("Controls", "Cards", "About", "Favorites", "Theme", "Boost", "Magic")
-                    GlassTabItem(
+                    ExpressGLTabItem(
                         icon = icons[i % icons.size],
                         label = labels[i % labels.size]
                     )
@@ -143,7 +143,7 @@ fun ShowcaseApp() {
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
                 
-                GlassBottomBar(
+                ExpressGLBottomBar(
                     items = tabs,
                     selectedIndex = selectedTab,
                     onTabSelected = { selectedTab = it },

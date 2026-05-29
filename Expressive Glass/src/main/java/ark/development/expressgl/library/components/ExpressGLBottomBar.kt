@@ -45,17 +45,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ark.development.expressgl.library.effect.specularEdge
-import ark.development.expressgl.library.theme.LocalGlassStyle
+import ark.development.expressgl.library.theme.LocalExpressGLStyle
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
- * Represents a single tab item for [GlassBottomBar].
+ * Represents a single tab item for [ExpressGLBottomBar].
  *
  * @param icon The icon vector for this tab.
  * @param label The text label below the icon.
  */
-data class GlassTabItem(
+data class ExpressGLTabItem(
     val icon: ImageVector,
     val label: String,
 )
@@ -80,8 +80,8 @@ data class GlassTabItem(
  * @param inactiveColor Color for inactive tab icons/labels.
  */
 @Composable
-fun GlassBottomBar(
-    items: List<GlassTabItem>,
+fun ExpressGLBottomBar(
+    items: List<ExpressGLTabItem>,
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -93,7 +93,7 @@ fun GlassBottomBar(
     inactiveColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
 ) {
     val scope = rememberCoroutineScope()
-    val glassStyle = LocalGlassStyle.current
+    val expressGLStyle = LocalExpressGLStyle.current
     val density = LocalDensity.current
 
     // Track bar width for pill positioning
@@ -114,7 +114,7 @@ fun GlassBottomBar(
         if (!isDraggingPill && barWidthPx > 0f) {
             pillCenter.animateTo(
                 targetValue = targetPillCenter,
-                animationSpec = GlassSprings.bouncy(),
+                animationSpec = ExpressGLSprings.bouncy(),
             )
         }
     }
@@ -126,17 +126,17 @@ fun GlassBottomBar(
 
     val pillWidthDp by animateDpAsState(
         targetValue = with(density) { if (isPillActive) (tabWidthPx * 1.15f).toDp() else (tabWidthPx * 0.9f).toDp() },
-        animationSpec = GlassSprings.fluid(),
+        animationSpec = ExpressGLSprings.fluid(),
         label = "pillWidth",
     )
     val pillHeightDp by animateDpAsState(
         targetValue = if (isPillActive) barHeight + 8.dp else barHeight - 16.dp,
-        animationSpec = GlassSprings.fluid(),
+        animationSpec = ExpressGLSprings.fluid(),
         label = "pillHeight",
     )
     val animatedPillColor by androidx.compose.animation.animateColorAsState(
         targetValue = if (isPillActive) pillColor else pillColor.copy(alpha = 0.8f),
-        animationSpec = GlassSprings.fluid(),
+        animationSpec = ExpressGLSprings.fluid(),
         label = "pillColor",
     )
     
@@ -187,7 +187,7 @@ fun GlassBottomBar(
                             } else {
                                 pillCenter.animateTo(
                                     targetValue = tabWidthPx * selectedIndex + tabWidthPx * 0.5f,
-                                    animationSpec = GlassSprings.bouncy(),
+                                    animationSpec = ExpressGLSprings.bouncy(),
                                 )
                             }
                         }
@@ -203,7 +203,7 @@ fun GlassBottomBar(
                             } else {
                                 pillCenter.animateTo(
                                     targetValue = tabWidthPx * selectedIndex + tabWidthPx * 0.5f,
-                                    animationSpec = GlassSprings.bouncy(),
+                                    animationSpec = ExpressGLSprings.bouncy(),
                                 )
                             }
                         }
@@ -236,8 +236,8 @@ fun GlassBottomBar(
                     shape = CircleShape,
                 )
                 .specularEdge(
-                    highlightColor = glassStyle.specularColor,
-                    intensity = glassStyle.specularIntensity * 0.6f,
+                    highlightColor = expressGLStyle.specularColor,
+                    intensity = expressGLStyle.specularIntensity * 0.6f,
                 )
         )
         // Pill indicator
@@ -295,7 +295,7 @@ fun GlassBottomBar(
                 val isSelected = index == selectedIndex
                 val iconScale by animateFloatAsState(
                     targetValue = if (isSelected) 1.15f else 1f,
-                    animationSpec = GlassSprings.bouncy(),
+                    animationSpec = ExpressGLSprings.bouncy(),
                     label = "iconScale_$index",
                 )
 
@@ -342,7 +342,7 @@ fun GlassBottomBar(
  * Curated spring animation specifications that blend Material Expressive's
  * bold motion with Apple's fluid, physics-driven feel.
  */
-object GlassSprings {
+object ExpressGLSprings {
     /**
      * Fluid spring — low stiffness, medium damping.
      * Used for primary interactions like press/release, pill sliding.

@@ -10,10 +10,10 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Glass-specific styling that layers on top of MaterialTheme.
- * Components read from this via [LocalGlassStyle].
+ * Components read from this via [LocalExpressGLStyle].
  */
 @Immutable
-data class GlassStyle(
+data class ExpressGLStyle(
     /** Base color for specular highlights. */
     val specularColor: Color = Color.White,
     /** Intensity of the specular highlight (0–1). */
@@ -31,16 +31,16 @@ data class GlassStyle(
 )
 
 /**
- * CompositionLocal providing [GlassStyle] defaults throughout the tree.
+ * CompositionLocal providing [ExpressGLStyle] defaults throughout the tree.
  * Consumers can override at any level.
  */
-val LocalGlassStyle = staticCompositionLocalOf { GlassStyle() }
+val LocalExpressGLStyle = staticCompositionLocalOf { ExpressGLStyle() }
 
 /**
  * Convenience object for default colors used in glass components
  * when MaterialTheme colors are not sufficient.
  */
-object GlassColors {
+object ExpressGLColors {
     val SpecularWhite = Color(0xFFFFFFFF)
     val SpecularBlue = Color(0x6688BBFF)
     val FrostWhite = Color(0x80FFFFFF)
@@ -54,7 +54,7 @@ object GlassColors {
 /**
  * Convenience accessors bridging MaterialTheme colors into glass components.
  */
-object GlassDefaults {
+object ExpressGLDefaults {
 
     /** Primary action color from the current MaterialTheme. */
     val primaryColor: Color

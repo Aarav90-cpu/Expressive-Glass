@@ -30,7 +30,7 @@ private val GlassLightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ExpressiveGlassTheme(
+fun ExpressiveExpressGLTheme(
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
