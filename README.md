@@ -9,6 +9,8 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-2026.05-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)
 
+DEMOVIDEO = https://github.com/Aarav90-cpu/Expressive-Glass/blob/main/DEMOVIDEO/expressgl_demo.mp4
+
 ---
 
 ## 🫧 Philosophy
