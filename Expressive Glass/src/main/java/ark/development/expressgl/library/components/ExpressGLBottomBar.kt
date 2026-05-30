@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ark.development.expressgl.library.modifiers.liquidSquashAndStretch
 import ark.development.expressgl.library.theme.LocalExpressGLStyle
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -58,6 +59,8 @@ data class ExpressGLTabItem(
     val icon: ImageVector,
     val label: String,
     val isBlocked: Boolean = false,
+    val pillColor: Color? = null,
+    val activeColor: Color? = null,
 )
 
 /**
@@ -93,7 +96,6 @@ fun ExpressGLBottomBar(
     inactiveColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
 ) {
     val scope = rememberCoroutineScope()
-    val expressGLStyle = LocalExpressGLStyle.current
     val density = LocalDensity.current
 
     // Track bar width for pill positioning
@@ -140,21 +142,47 @@ fun ExpressGLBottomBar(
 
     var isBarPressed by remember { mutableStateOf(false) }
     val displayCenter = if (isDraggingPill) dragCenter else pillCenter.value
-    val isMoving = isDraggingPill || kotlin.math.abs(targetPillCenter - pillCenter.value) > 1f
+    val isMoving = isDraggingPill || pillCenter.isRunning
     val isPillActive = isBarPressed || isMoving
 
+    val tabContentWidths = remember { androidx.compose.runtime.mutableStateMapOf<Int, Float>() }
+    
+    val fractionalIndex = if (tabWidthPx > 0f) ((displayCenter - tabWidthPx * 0.5f) / tabWidthPx).coerceIn(0f, (tabCount - 1).toFloat()) else 0f
+    val leftIndex = kotlin.math.floor(fractionalIndex).toInt().coerceIn(0, tabCount - 1)
+    val rightIndex = kotlin.math.ceil(fractionalIndex).toInt().coerceIn(0, tabCount - 1)
+    val fraction = fractionalIndex - leftIndex
+
+    val leftContentWidth = tabContentWidths[leftIndex] ?: (tabWidthPx * 0.6f)
+    val rightContentWidth = tabContentWidths[rightIndex] ?: (tabWidthPx * 0.6f)
+    val currentContentWidth = androidx.compose.ui.util.lerp(leftContentWidth, rightContentWidth, fraction)
+
+    val minRestingWidth = tabWidthPx * 0.85f
+    val minActiveWidth = tabWidthPx * 1.05f
+
+    val targetPillWidthPx = if (isPillActive) {
+        (currentContentWidth + 80f).coerceAtLeast(minActiveWidth)
+    } else {
+        (currentContentWidth + 60f).coerceAtLeast(minRestingWidth)
+    }
+
     val pillWidthDp by animateDpAsState(
-        targetValue = with(density) { if (isPillActive) (tabWidthPx * 1.15f).toDp() else (tabWidthPx * 0.9f).toDp() },
-        animationSpec = ExpressGLSprings.fluid(),
+        targetValue = with(density) { targetPillWidthPx.toDp() },
+        animationSpec = ExpressGLSprings.snappy(),
         label = "pillWidth",
     )
     val pillHeightDp by animateDpAsState(
-        targetValue = if (isPillActive) barHeight + 8.dp else barHeight - 16.dp,
-        animationSpec = ExpressGLSprings.fluid(),
+        targetValue = if (isPillActive) barHeight + 3.dp else barHeight - 8.dp,
+        animationSpec = ExpressGLSprings.snappy(),
         label = "pillHeight",
     )
+
+
+    val leftPillColor = items[leftIndex].pillColor ?: pillColor
+    val rightPillColor = items[rightIndex].pillColor ?: pillColor
+    val targetPillColor = androidx.compose.ui.graphics.lerp(leftPillColor, rightPillColor, fraction)
+    
     val animatedPillColor by androidx.compose.animation.animateColorAsState(
-        targetValue = if (isPillActive) pillColor else pillColor.copy(alpha = 0.8f),
+        targetValue = targetPillColor,
         animationSpec = ExpressGLSprings.fluid(),
         label = "pillColor",
     )
@@ -165,7 +193,7 @@ fun ExpressGLBottomBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
             .height(barHeight)
             .graphicsLayer {
                 scaleX = rejectScale.value
@@ -177,10 +205,7 @@ fun ExpressGLBottomBar(
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
-                        event.changes.forEach {
-                            if (it.pressed) isBarPressed = true
-                            else isBarPressed = false
-                        }
+                        isBarPressed = event.changes.any { it.pressed }
                     }
                 }
             }
@@ -285,27 +310,23 @@ fun ExpressGLBottomBar(
             Box(
                 modifier = Modifier
                     .graphicsLayer {
-                        val v = if (isDraggingPill) dragVelocity else pillCenter.velocity
-                        val stretch = (kotlin.math.abs(v) * 0.05f).coerceAtMost(tabWidthPx * 0.6f)
-                        
                         val halfW = pillWidthDp.toPx() / 2f
                         translationX = displayCenter - halfW
-                        
-                        val baseW = pillWidthDp.toPx()
-                        scaleX = if (baseW > 0) (baseW + stretch) / baseW else 1f
-                        transformOrigin = androidx.compose.ui.graphics.TransformOrigin(
-                            pivotFractionX = if (v > 0) 1f else 0f, 
-                            pivotFractionY = 0.5f
-                        )
                     }
+                    .liquidSquashAndStretch(
+                        velocity = if (isDraggingPill) dragVelocity else pillCenter.velocity,
+                        componentWidth = pillWidthDp.value * density.density,
+                        maxStretchRatio = 0.6f,
+                        volumePreservationFactor = 0.3f
+                    )
                     .width(pillWidthDp)
                     .height(pillHeightDp)
-                    .clip(ExpressGLCapsule)
+                    .clip(RoundedCornerShape(50))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 animatedPillColor,
-                                animatedPillColor.copy(alpha = 0.6f),
+                                animatedPillColor.copy(alpha = 0.85f),
                             ),
                         ),
                     )
@@ -326,8 +347,7 @@ fun ExpressGLBottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(barHeight)
-                .padding(horizontal = 8.dp),
+                .height(barHeight),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -354,26 +374,45 @@ fun ExpressGLBottomBar(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.label,
-                        tint = if (isSelected) activeColor else inactiveColor,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .graphicsLayer {
-                                scaleX = iconScale
-                                scaleY = iconScale
-                            },
-                    )
-                    Text(
-                        text = item.label,
-                        color = if (isSelected) activeColor else inactiveColor,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = 11.sp,
-                        ),
-                        modifier = Modifier.padding(top = 4.dp),
-                    )
+                    val tabActiveColor = item.activeColor ?: activeColor
+                    val tabCenter = tabWidthPx * index + tabWidthPx * 0.5f
+                    val distance = kotlin.math.abs(displayCenter - tabCenter)
+                    val proximity = (1f - (distance / tabWidthPx)).coerceIn(0f, 1f)
+                    
+                    val dynamicTintColor = androidx.compose.ui.graphics.lerp(inactiveColor, tabActiveColor, proximity)
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.onSizeChanged { size ->
+                            tabContentWidths[index] = size.width.toFloat()
+                        }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.label,
+                                tint = dynamicTintColor,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .graphicsLayer {
+                                        scaleX = iconScale
+                                        scaleY = iconScale
+                                    },
+                            )
+                            Text(
+                                text = item.label,
+                                color = dynamicTintColor,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    fontSize = 11.sp,
+                                ),
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -395,6 +434,15 @@ object ExpressGLSprings {
     fun <T> fluid() = androidx.compose.animation.core.spring<T>(
         dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
         stiffness = androidx.compose.animation.core.Spring.StiffnessLow,
+    )
+
+    /**
+     * Snappy spring — medium-low stiffness, medium damping.
+     * Faster than fluid, used for resizing so the pill doesn't lag when shrinking.
+     */
+    fun <T> snappy() = androidx.compose.animation.core.spring<T>(
+        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
+        stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow,
     )
 
     /**

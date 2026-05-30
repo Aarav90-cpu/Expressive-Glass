@@ -48,10 +48,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ark.development.expressgl.library.components.ExpressGLBottomBar
@@ -62,14 +66,9 @@ import ark.development.expressgl.ui.theme.ExpressivePurple
 import ark.development.expressgl.ui.theme.ExpressiveExpressGLTheme
 import ark.development.expressgl.ui.theme.ExpressiveTeal
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.unit.IntOffset
 import ark.development.expressgl.library.layout.ExpressGLGooeyContainer
 import ark.development.expressgl.library.shapes.ExpressGLCapsule
 import ark.development.expressgl.library.shapes.SmoothPolygonShape
@@ -194,7 +193,8 @@ fun ShowcaseApp() {
             ExpressGLToggle(
                 checked = toggle2,
                 onCheckedChange = { toggle2 = it },
-                checkedColor = ExpressivePurple
+                checkedColor = ExpressivePurple,
+                activeTrackColor = ExpressivePurple.copy(alpha = 0.3f)
             )
             
             ExpressGLToggle(
@@ -204,26 +204,71 @@ fun ShowcaseApp() {
             )
         }
 
-        // 5. Original Bottom Bar
+        // 5. Bottom Bar Variants
         Text(
-            text = "Bottom Bar",
+            text = "Bottom Bar Variants",
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        var selectedTab by remember { mutableIntStateOf(0) }
-        val tabs = listOf(
-            ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes"),
-            ExpressGLTabItem(Icons.Rounded.Star, "Gooey"),
-            ExpressGLTabItem(Icons.Rounded.AutoAwesome, "Tilt"),
-            ExpressGLTabItem(Icons.Rounded.Lock, "Pro", isBlocked = true)
+
+        // 2 Tabs
+        var selectedTab2 by remember { mutableIntStateOf(0) }
+        val tabs2 = listOf(
+            ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes", pillColor = ExpressivePeach, activeColor = Color.White),
+            ExpressGLTabItem(Icons.Rounded.Star, "Gooey", pillColor = ExpressivePurple, activeColor = Color.White)
         )
         ExpressGLBottomBar(
-            items = tabs,
-            selectedIndex = selectedTab,
-            onTabSelected = { selectedTab = it },
+            items = tabs2,
+            selectedIndex = selectedTab2,
+            onTabSelected = { selectedTab2 = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // 4 Tabs (Original)
+        var selectedTab4 by remember { mutableIntStateOf(0) }
+        val tabs4 = listOf(
+            ExpressGLTabItem(Icons.Rounded.TouchApp, "Shapes", pillColor = ExpressivePeach, activeColor = Color.White),
+            ExpressGLTabItem(Icons.Rounded.Star, "Gooey", pillColor = ExpressivePurple, activeColor = Color.White),
+            ExpressGLTabItem(Icons.Rounded.AutoAwesome, "Tilt", pillColor = Color(0xFF4CAF50), activeColor = Color.White),
+            ExpressGLTabItem(Icons.Rounded.Lock, "Pro", isBlocked = true, pillColor = Color(0xFFF44336), activeColor = Color.White)
+        )
+        ExpressGLBottomBar(
+            items = tabs4,
+            selectedIndex = selectedTab4,
+            onTabSelected = { selectedTab4 = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // 5 Tabs
+        var selectedTab5 by remember { mutableIntStateOf(0) }
+        val tabs5 = tabs4 + ExpressGLTabItem(Icons.Rounded.Palette, "Color", pillColor = Color(0xFF2196F3), activeColor = Color.White)
+        ExpressGLBottomBar(
+            items = tabs5,
+            selectedIndex = selectedTab5,
+            onTabSelected = { selectedTab5 = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // 6 Tabs
+        var selectedTab6 by remember { mutableIntStateOf(0) }
+        val tabs6 = tabs5 + ExpressGLTabItem(Icons.Rounded.Dashboard, "Grid", pillColor = Color(0xFFFF9800), activeColor = Color.White)
+        ExpressGLBottomBar(
+            items = tabs6,
+            selectedIndex = selectedTab6,
+            onTabSelected = { selectedTab6 = it },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        // 7 Tabs
+        var selectedTab7 by remember { mutableIntStateOf(0) }
+        val tabs7 = tabs6 + ExpressGLTabItem(Icons.Rounded.Rocket, "Boost", pillColor = Color(0xFFE91E63), activeColor = Color.White)
+        ExpressGLBottomBar(
+            items = tabs7,
+            selectedIndex = selectedTab7,
+            onTabSelected = { selectedTab7 = it },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(64.dp))
     }
 }

@@ -33,7 +33,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ark.development.expressgl.library.modifiers.liquidSquashAndStretch
 import ark.development.expressgl.library.shapes.ExpressGLCapsule
+import ark.development.expressgl.library.theme.LocalExpressGLStyle
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -63,6 +65,7 @@ fun ExpressGLToggle(
     checkedColor: Color = MaterialTheme.colorScheme.primary,
     uncheckedColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
     trackColor: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+    activeTrackColor: Color? = null,
     outlineColor: Color = Color.White.copy(alpha = 0.4f),
 ) {
     val scope = rememberCoroutineScope()
@@ -136,10 +139,18 @@ fun ExpressGLToggle(
     val displayCenter = if (isDragging) dragCenter else thumbCenter.value
     
     // Determine dynamic colors
+    val isCheckedState = checked || (isDragging && displayCenter > trackWidthPx / 2f)
+    
     val animatedThumbColor by animateColorAsState(
-        targetValue = if (checked || (isDragging && displayCenter > trackWidthPx / 2f)) checkedColor else uncheckedColor,
+        targetValue = if (isCheckedState) checkedColor else uncheckedColor,
         animationSpec = ExpressGLSprings.fluid(),
         label = "thumbColor"
+    )
+
+    val animatedTrackColor by animateColorAsState(
+        targetValue = if (isCheckedState) (activeTrackColor ?: trackColor) else trackColor,
+        animationSpec = ExpressGLSprings.fluid(),
+        label = "trackColor"
     )
 
     // Dynamic width for squash effect
@@ -174,8 +185,8 @@ fun ExpressGLToggle(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        trackColor,
-                        trackColor.copy(alpha = trackColor.alpha + 0.1f),
+                        animatedTrackColor,
+                        animatedTrackColor.copy(alpha = animatedTrackColor.alpha.coerceAtMost(0.9f) + 0.1f),
                     ),
                 ),
             )
@@ -280,19 +291,15 @@ fun ExpressGLToggle(
             Box(
                 modifier = Modifier
                     .graphicsLayer {
-                        val v = if (isDragging) dragVelocity else thumbCenter.velocity
-                        val stretch = (abs(v) * 0.05f).coerceAtMost(trackWidthPx * 0.4f)
-                        
                         val halfW = dynamicThumbWidth.toPx() / 2f
                         translationX = displayCenter - halfW
-                        
-                        val baseW = dynamicThumbWidth.toPx()
-                        scaleX = if (baseW > 0) (baseW + stretch) / baseW else 1f
-                        transformOrigin = TransformOrigin(
-                            pivotFractionX = if (v > 0) 1f else 0f, 
-                            pivotFractionY = 0.5f
-                        )
                     }
+                    .liquidSquashAndStretch(
+                        velocity = if (isDragging) dragVelocity else thumbCenter.velocity,
+                        componentWidth = dynamicThumbWidth.value * density.density,
+                        maxStretchRatio = 0.2f,
+                        volumePreservationFactor = 0.3f
+                    )
                     .width(dynamicThumbWidth)
                     .height(dynamicThumbHeight)
                     .clip(ExpressGLCapsule)
