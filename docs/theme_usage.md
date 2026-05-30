@@ -34,3 +34,9 @@ CompositionLocalProvider(
 ```
 
 The `ExpressGLStyle` data class allows you to inject these variables deeply without having to pass `cornerRadius` or `blurRadius` into every single component's constructor!
+
+## The Physics Theme (ExpressGLSprings)
+While `ExpressGLStyle` handles the visuals, the library's feel is dictated by `ExpressGLSprings`. Whenever you create a custom component using the theme, ensure you bind its sizes and translations to these springs:
+- `fluid()`: Use this for primary shape morphing (squashing/stretching) and sliding.
+- `snappy()`: Use this for fast fallbacks, such as a component snapping back to its original dimensions without lag.
+- `bouncy()`: Use this for playful interactions, like a toggle snapping to a side or a component shaking when rejected.
