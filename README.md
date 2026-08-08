@@ -7,8 +7,6 @@ A Jetpack Compose UI library that fuses Material Design's bold, expressive visua
 Woo Hoo... Even thought this project is marked in development I think we are done... the Sliders a already pretty good and so are the loading bars in material Expressive 3.
 All I have to do is optimise now and lower down the api level slowly but gradually.
 
-Just a note but i am focussing on another project so for a while do not expect updates until at least next month!
-
 [![](https://jitpack.io/v/Aarav90-cpu/Expressive-Glass.svg)](https://jitpack.io/#Aarav90-cpu/Expressive-Glass)
 ![API](https://img.shields.io/badge/API-36%2B-brightgreen.svg)
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-2026.05-blue.svg)
