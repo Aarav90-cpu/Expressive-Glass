@@ -1,6 +1,5 @@
 package ark.development.expressgl.library.shapes
 
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -133,7 +132,7 @@ class SmoothPolygonShape(
             }
 
             // Draw rounded corner using quadratic bezier curve using the vertex as the control point
-            path.quadraticBezierTo(curr.x, curr.y, p2x, p2y)
+            path.quadraticTo(curr.x, curr.y, p2x, p2y)
         }
 
         path.close()

@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
  * @param alphaThreshold The alpha threshold multiplier. Higher values create sharper edges.
  * @param content The composable children.
  */
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ExpressGLGooeyContainer(
     modifier: Modifier = Modifier,
