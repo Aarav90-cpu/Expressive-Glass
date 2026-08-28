@@ -6,15 +6,15 @@ plugins {
 android {
     namespace = "ark.development.expressgl"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
 
     defaultConfig {
         applicationId = "ark.development.expressgl"
-        minSdk = 36
-        targetSdk = 36
+        minSdk = 31
+        targetSdk = 37
         versionCode = 1
         versionName = "0.0.1-alpha"
 
@@ -41,7 +41,6 @@ android {
 
 dependencies {
     implementation(project(":Expressive Glass"))
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)

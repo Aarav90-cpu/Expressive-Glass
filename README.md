@@ -4,11 +4,8 @@
 
 A Jetpack Compose UI library that fuses Material Design's bold, expressive visual language with Apple's physics-driven interaction model. Every component *looks* Material Expressive and *feels* like Apple's Liquid Glass.
 
-Woo Hoo... Even thought this project is marked in development I think we are done... the Sliders a already pretty good and so are the loading bars in material Expressive 3.
-All I have to do is optimise now and lower down the api level slowly but gradually.
-
 [![](https://jitpack.io/v/Aarav90-cpu/Expressive-Glass.svg)](https://jitpack.io/#Aarav90-cpu/Expressive-Glass)
-![API](https://img.shields.io/badge/API-36%2B-brightgreen.svg)
+![API](https://img.shields.io/badge/API-31%2B-brightgreen.svg)
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-2026.05-blue.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)
 

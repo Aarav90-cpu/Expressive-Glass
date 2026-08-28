@@ -7,13 +7,13 @@ plugins {
 android {
     namespace = "ark.development.expressgl.library"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
 
     defaultConfig {
-        minSdk = 36
+        minSdk = 31
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -61,5 +61,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
 
     // Smooth capsule and rounded rectangle shapes
-    implementation("io.github.kyant0:capsule:2.1.3")
+    implementation(libs.capsule)
 }
